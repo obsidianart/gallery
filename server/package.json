@@ -1,14 +1,18 @@
 {
   "name": "server",
   "version": "1.0.0",
+  "private": true,
   "description": "",
-  "main": "index.js",
   "scripts": {
+    "start": "node index.js",
+    "start-dev": "nodemon index.js",
     "test": "echo \"Testing not required by the instructions\" && exit 1"
   },
   "author": "Stefano Solinas",
   "license": "ISC",
   "dependencies": {
-    "express": "4.16.4"
+    "express": "4.16.4",
+    "express-fileupload": "1.1.1-alpha.1",
+    "uniqid": "5.0.3"
   }
 }
