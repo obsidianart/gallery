@@ -1,0 +1,14 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Testing not required by the instructions\" && exit 1"
+  },
+  "author": "Stefano Solinas",
+  "license": "ISC",
+  "dependencies": {
+    "express": "4.16.4"
+  }
+}
