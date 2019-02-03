@@ -23,9 +23,9 @@ const getTotalCount = (docs) => docs.length
 module.exports = {
   getList: async ({ limit, filterByName } = {}) => {
     let list = documents
-    
+
     if (filterByName) {
-      list = list.filter(doc => doc.name.includes(filterByName))
+      list = list.filter(doc => doc.name.toLowerCase().includes(filterByName.toLowerCase()))
     }
 
     //I need to evaluate the total before slicing it

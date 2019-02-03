@@ -23,7 +23,9 @@ app.use(fileUpload({
 }))
 
 app.get('/api/list', async (req, res) => {
-  const list = await docs.getList()
+  const list = await docs.getList({
+    filterByName: req.query.filterByName
+  })
   res.send(list)
 })
 

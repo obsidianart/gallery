@@ -24,7 +24,7 @@ class App extends Component {
   }
 
   updateDocs = async () => {
-    const documents = await DocumentsApi.get()
+    const documents = await DocumentsApi.get({ filterByName:this.state.filter})
     this.setState({ ...documents })
   }
 
@@ -40,20 +40,27 @@ class App extends Component {
 
     const deletion = await DocumentsApi.delete(id)
     deletion.error && this.setState({ error: deletion.error })
-    await this.updateDocs()
+    this.updateDocs()
   }
   
   uploadDocuments = async (files) => {
     const upload = await DocumentsApi.upload(files)
     upload.error && this.setState({ error: upload.error })
-    await this.updateDocs()
+    this.updateDocs()
+  }
+
+  updateFilter = async (event) => {
+    // Depending on the use we might want to debounce here
+    this.setState({ filter: event.target.value }, ()=>{
+      this.updateDocs()
+    })
   }
 
   render() {
     return (
       <div className="App">
         <header className="App-header">
-          <input type="text" placeholder="Search documents"></input>
+          <input type="text" placeholder="Search documents" onChange={this.updateFilter}></input>
           <button onClick={this.toggleUploadArea}>UPLOAD</button>
         </header>
         <FileUploader uploadDocuments={this.uploadDocuments} />

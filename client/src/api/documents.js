@@ -1,6 +1,12 @@
-const get = async () => {
+const get = async ({ filterByName}) => {
   try {
-    const response = await fetch(`${process.env.REACT_APP_API}/list`)
+    let url = `${process.env.REACT_APP_API}/list`
+
+    if (filterByName) {
+      url += `?filterByName=${filterByName}`
+    }
+
+    const response = await fetch(url)
     if (response.status > 200) throw new Error('Something is wrong with the server, please try again')
     const list = await response.json()
 
