@@ -34,4 +34,18 @@ context('Page elements', () => {
     cy.get('[data-cy=document] h3').last().invoke('text').should('contain', 'tree.jpg')
   })
 
+  it('should not allow to upload a text file and alert the user', () => {
+    const stub = cy.stub()
+    cy.on('window:alert', stub)
+
+    cy.get('[data-cy="upload"]').click()
+    
+    cy
+      .get('[data-cy=dropzone]')
+      .dropFile('../fixtures/fail.txt', 'text')
+      .then(() => {
+        expect(stub.getCall(0)).to.be.calledWith('Sorry, your file is either too big or the wrong format. Only jpg and png under 10MB are accepted')
+      })
+  })
+
 })
