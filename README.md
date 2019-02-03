@@ -47,42 +47,57 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 
 
 ## Security
-Backend security will not be discussed as it is not implemented
-On the frontend perspective, the main risk are the user content generated from user A but displayed from user B
+On the frontend perspective, the main risk is the user content generated from user A but displayed from user B. User generated content might contain executable script if added directly to the page.
 With the current structure, a document is represented by:
 - `id` => this is generated hence no risk
 - `size` => this is generated hence no risk
-- `name` => this is inserted by the user. The React template interpolation should take care correctly of any attempt to manipulate this but it might be worth looking more into it
+- `name` => this is inserted by the user. Sanitization is probably done serverside. For security reason frontend should not trust the backend data in a high security application. The React template interpolation should take care correctly of any attempt to manipulate this
 
 Note: there's no requirement or UX suggestion that the files can be retrieved from this interface (even if it is asked that the mock saves them). The ability of retrieving files would open for a lot more security concern and might require the backend to perform additional security on the images.
+
+Backend security is out of scope for this test but:
+- filename sanification
+- file type check against headers
+- evaluate remove jpg/png metadata and resave
+- evaluate possible attack in the search, sanitaze input before passing to the data layer
+- evaluate brutoforce or ddos attack, limit user request per minute etc
 
 
 ## Improvements
 Depending on the actual use the following might be useful
-- Loading state when fetching
-- Uploading percentage
+- User feedback for slow operations: Show the user a loading message while fetching (search and list)
+- User feedback for slow operations: Uploading percentage
 - Explicit errors: currently the backend always return a generic error. It is likely that for security this is the case but it's worth seeing if some error can be descriptive
 - Better design: I'm not sure about this one, the requirements ask for a specific design
 - Auto-upload on drag: instead of clicking the button allow the entire window to be a drop area
 - Check file headers instead of mime type: I remember a bug on a browser from 4 years ago using mime type, more testing is required (I think the problem was when uploading from a Samsung Android phone but I can't test it)
 - Directly upload on mobile: for mobile screen evaluate the possibility to not having drag & drop
-- Evaluate pagination: Is pagination needed? how many file can be there?
+- Evaluate pagination: Is pagination needed? how many files can be there?
 
 ## Libraries
 I'm going to discuss only frotend libraries
 - The project is based on the basic react app
 - react-dropzone: It allows a nicer interface for uploading files and allows drag and drop
+- styled-components: it helps with the styling of the application
 
 ## API
 All endpoint return json. All endpoint return an `{error: 'actual error'}` on expected error.
 The global error handler is not updated, if the mock goes that bad probably we should fix the mock.
 
-### GET /list?filterByName=filter
+### GET /api/list?filterByName=[string]
 - returns the list of all documents
 - accept a query param called filterByName, all documents are returned when empty
 - sizes are in KB
-- returns a json object as follow
+- returns a json object
+- example
+```
+  GET /api/list?filterByName=Doc 1
+  Accept: application/json
+```
 ``` JSON
+//HTTP 200
+//response body
+
 {
   "documents": [
     {
@@ -96,18 +111,58 @@ The global error handler is not updated, if the mock goes that bad probably we s
 }
 ```
 
-### DELETE /delete/:id
+### DELETE /api/delete/:id
 - the file is removed from the list
 - the endpoint is idempotent (it always return 200 unless an error occurs)
 
-### POST /upload
+```
+  DELETE /api/delete/1
+  Accept: application/json
+```
+``` JSON
+//HTTP 200
+//response body
+
+{}
+```
+
+### POST /api/upload
 - the endpoint leverage on [express-filer-uploader](https://www.npmjs.com/package/express-fileupload)
 - the maximum file size is 10
 - the endpoint accept multiple files, this might be incorrect against the requirements
+```
+  POST /api/upload
+  Accept: application/json
+  Content-Type: multipart/form-data; boundary=----foobar
+
+  ------foobar
+    Content-Disposition: form-data; name="9mb.jpg"; filename="9mb.jpg"
+    Content-Type: image/jpeg
+  ------foobar--
+
+  iVBORw0KGgoAAAANSUhEUgAAAzoAAAI2CAYAAACYBP17AAAMSGlDQ1BJQ0MgUHJvZmlsZQAASImVVwdYU8kWnltSSWiBCEgJvYlSpEsJoUUQkCrYCEkgocSYEETsyqKCaxcRsKGrIoquBRA79rIodtfyUBaVlXWxYEPlTQro6vfe...
+```
+``` JSON
+//HTTP 200
+//response body
+
+{}
+```
+
+### POST /api/reset
+- reset the mock to it's original state, used only for testing
+- 
+```
+  POST /api/upload
+  Accept: application/json
+```
+``` JSON
+//HTTP 200
+//response body
+
+{}
+```
 
 ---
 ## Other notes
-I would love if open tests would have a problem to solve as well.
-In a normal working enviroment I would ask for explanations or know more to make my own decisions.
-Without knowing the project, the users, the reasons, how can I decide if not having a way to see the uploaded image is right or wrong?
-How can I know if doing more than required is good or bad?
+I did not implement a way to download the documents because there's no suggestion in the UX that this is a possible interaction.
