@@ -156,7 +156,7 @@ The global error handler is not updated, if the mock goes that bad probably we s
 
 ### POST /api/reset
 - reset the mock to it's original state, used only for testing
-- 
+
 ```
   POST /api/reset
   Accept: application/json
