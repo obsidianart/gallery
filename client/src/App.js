@@ -30,6 +30,10 @@ class App extends Component {
 
   deleteDocument = async (id) => {
     // I know I'm not actually removing the file
+    //eslint-disable-next-line
+    const confirmed = confirm('Are you sure you want to delete?')
+
+    if (!confirmed) return
 
     this.setState({
       documents: this.state.documents.map(doc=>({
