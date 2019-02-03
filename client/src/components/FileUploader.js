@@ -22,14 +22,17 @@ const rejectStyle = {
   backgroundColor: '#eee'
 };
 
-
 class FileUploader extends PureComponent {
+  showUserError = () => {
+    alert('Sorry, your file is either too big or the wrong format. Only jpg and png under 10MB are accepted')
+  }
 
   render() {
     return (
       <Dropzone
         accept="image/jpeg, image/png"
         onDropAccepted={this.props.uploadDocuments}
+        onDropRejected={this.showUserError}
         multiple={false}
         maxSize={10000000}
       >
