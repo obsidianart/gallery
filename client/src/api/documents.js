@@ -36,9 +36,6 @@ const deleteDocument = async (id) => {
 
 const uploadDocuments = async (files) => {
   try {
-    console.log('dropped file')
-    console.log(files)
-
     const formData = new FormData();
 
     files.forEach((file) => {

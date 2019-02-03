@@ -27,7 +27,12 @@ class FileUploader extends PureComponent {
 
   render() {
     return (
-      <Dropzone accept="image/jpeg, image/png" onDrop={this.props.uploadDocuments}>
+      <Dropzone
+        accept="image/jpeg, image/png"
+        onDropAccepted={this.props.uploadDocuments}
+        multiple={false}
+        maxSize={10000000}
+      >
         {({ getRootProps, getInputProps, isDragActive, isDragAccept, isDragReject, acceptedFiles, rejectedFiles }) => {
           let styles = { ...baseStyle }
           styles = isDragActive ? { ...styles, ...activeStyle } : styles
@@ -40,9 +45,9 @@ class FileUploader extends PureComponent {
             >
               <input {...getInputProps()} />
               <div>
-                {isDragAccept ? 'Drop' : 'Drag'} files here...
+                {isDragAccept ? 'Drop' : 'Drag'} files here or click...
               </div>
-              {isDragReject && <div style={{backgroundColor:'red'}}>Unsupported file type...</div>}
+              {isDragReject && <div style={{backgroundColor:'red'}}>One file at time, jpg or png</div>}
             </div>
           )
         }}
