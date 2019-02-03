@@ -21,8 +21,8 @@ You will also see any lint errors in the console.
 
 ### `npm test`
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Launches the Cypress test runner.<br>
+See the section about [running tests](https://docs.cypress.io/guides/getting-started/testing-your-app.html) for more information.
 
 ### `npm run build`
 
@@ -44,8 +44,6 @@ Instead, it will copy all the configuration files and the transitive dependencie
 
 You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-
-
 ## Security
 On the frontend perspective, the main risk is the user content generated from user A but displayed from user B. User generated content might contain executable script if added directly to the page.
 With the current structure, a document is represented by:
@@ -61,10 +59,11 @@ Backend security is out of scope for this test but:
 - evaluate remove jpg/png metadata and resave
 - evaluate possible attack in the search, sanitaze input before passing to the data layer
 - evaluate brutoforce or ddos attack, limit user request per minute etc
-
+- evaluate logging all requests and IPs
 
 ## Improvements
 Depending on the actual use the following might be useful
+- Clarify if the name is the file name and if the extension should be changed
 - User feedback for slow operations: Show the user a loading message while fetching (search and list)
 - User feedback for slow operations: Uploading percentage
 - Explicit errors: currently the backend always return a generic error. It is likely that for security this is the case but it's worth seeing if some error can be descriptive
@@ -73,6 +72,10 @@ Depending on the actual use the following might be useful
 - Check file headers instead of mime type: I remember a bug on a browser from 4 years ago using mime type, more testing is required (I think the problem was when uploading from a Samsung Android phone but I can't test it)
 - Directly upload on mobile: for mobile screen evaluate the possibility to not having drag & drop
 - Evaluate pagination: Is pagination needed? how many files can be there?
+- Discuss why the design uses "kb" and not "kB" or "KB"
+- Evaluate websocket or document auto refresh
+- Evaluate converting KB to MB or GB when the size grows
+- Evaluate expressing numbers in the user locale
 
 ## Libraries
 I'm going to discuss only frotend libraries
@@ -113,7 +116,7 @@ The global error handler is not updated, if the mock goes that bad probably we s
 
 ### DELETE /api/delete/:id
 - the file is removed from the list
-- the endpoint is idempotent (it always return 200 unless an error occurs)
+- the endpoint is idempotent (it always return 200 unless an error occurs). If the file doesn't exist the operation is considered succesful
 
 ```
   DELETE /api/delete/1
@@ -153,7 +156,7 @@ The global error handler is not updated, if the mock goes that bad probably we s
 - reset the mock to it's original state, used only for testing
 - 
 ```
-  POST /api/upload
+  POST /api/reset
   Accept: application/json
 ```
 ``` JSON

@@ -1,8 +1,0 @@
-.Document {
-  border: 1px solid black;
-  display: inline-block;
-}
-
-.Document.deleting {
-  opacity: 0.3;
-}

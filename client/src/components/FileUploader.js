@@ -1,29 +1,11 @@
 import React, { PureComponent } from 'react';
 import Dropzone from 'react-dropzone'
-
-// import './Document.css';
-
-const baseStyle = {
-  width: 200,
-  height: 200,
-  borderWidth: 2,
-  borderColor: '#666',
-  borderStyle: 'dashed',
-  borderRadius: 5
-};
-const activeStyle = {
-  borderStyle: 'solid',
-  borderColor: '#6c6',
-  backgroundColor: '#eee'
-};
-const rejectStyle = {
-  borderStyle: 'solid',
-  borderColor: '#c66',
-  backgroundColor: '#eee'
-};
+import {
+  DropzoneStyled
+} from '../styledComponents'
 
 class FileUploader extends PureComponent {
-  showUserError = () => {
+  showUserError = (file) => {
     alert('Sorry, your file is either too big or the wrong format. Only jpg and png under 10MB are accepted')
   }
 
@@ -31,27 +13,28 @@ class FileUploader extends PureComponent {
     return (
       <Dropzone
         accept="image/jpeg, image/png"
+        onDrop={()=>alert('dropped')}
         onDropAccepted={this.props.uploadDocuments}
         onDropRejected={this.showUserError}
         multiple={false}
         maxSize={10000000}
       >
         {({ getRootProps, getInputProps, isDragActive, isDragAccept, isDragReject, acceptedFiles, rejectedFiles }) => {
-          let styles = { ...baseStyle }
-          styles = isDragActive ? { ...styles, ...activeStyle } : styles
-          styles = isDragReject ? { ...styles, ...rejectStyle } : styles
-
           return (
-            <div
+            <DropzoneStyled
+              isDragAccept={isDragAccept}
+              isDragReject={isDragReject}
               {...getRootProps()}
-              style={styles}
+              data-cy="dropzone"
             >
               <input {...getInputProps()} />
-              <div>
-                {isDragAccept ? 'Drop' : 'Drag'} files here or click...
-              </div>
-              {isDragReject && <div style={{backgroundColor:'red'}}>One file at time, jpg or png</div>}
-            </div>
+              {!isDragReject && (
+                <p>
+                  {isDragAccept ? 'Drop' : 'Drag'} jpg or png here or click... Maximum size is 10MB
+                </p>
+              )}
+              {isDragReject && <p>One file at time, jpg or png</p>}
+            </DropzoneStyled>
           )
         }}
       </Dropzone>

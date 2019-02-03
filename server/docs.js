@@ -7,11 +7,27 @@ const originalState = [
   {
     id: '1',
     name: 'Doc 1',
-    size: 600
+    size: 100
   }, {
     id: '2',
     name: 'Doc 2',
-    size: 200
+    size: 100
+  }, {
+    id: '3',
+    name: 'Doc 3',
+    size: 100
+  }, {
+    id: '4',
+    name: 'Doc 4',
+    size: 100
+  }, {
+    id: '5',
+    name: 'Doc 5',
+    size: 100
+  }, {
+    id: '6',
+    name: 'Doc 6',
+    size: 100
   }
 ]
 

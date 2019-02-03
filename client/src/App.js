@@ -1,9 +1,17 @@
-import React, { Component } from 'react';
-import './App.css';
+import React, { Component } from 'react'
 import Document from './components/Document'
 import FileUploader from './components/FileUploader'
 import DocumentsApi from './api/documents'
-
+import {
+  UploadButton,
+  Container,
+  Header,
+  Input,
+  GalleryHeader,
+  GalleryDocuments,
+  H1,
+  H2,
+} from './styledComponents'
 class App extends Component {
   state = {
     documents: [],
@@ -13,8 +21,8 @@ class App extends Component {
     filter: false
   }
 
-  async componentWillMount () {
-    await this.updateDocs()
+  componentWillMount () {
+    this.updateDocs()
   }
 
   toggleUploadArea = async () => {
@@ -30,7 +38,7 @@ class App extends Component {
 
   deleteDocument = async (id) => {
     // I know I'm not actually removing the file
-    //eslint-disable-next-line
+    // eslint-disable-next-line
     const confirmed = confirm('Are you sure you want to delete?')
 
     if (!confirmed) return
@@ -62,29 +70,34 @@ class App extends Component {
 
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <input type="text" placeholder="Search documents" onChange={this.updateFilter}></input>
-          <button onClick={this.toggleUploadArea}>UPLOAD</button>
-        </header>
-        <FileUploader uploadDocuments={this.uploadDocuments} />
-        {this.state.error && <div>{this.state.error}</div>}
-        <div>
-          <h3>{this.state.documentsCount} documents</h3>
-          <h4>Total Size: {this.state.documentsTotalSize}kb</h4>
-        </div>
+      <Container>
+        <Header>
+          <Input type="text" placeholder="Search documents..." onChange={this.updateFilter} data-cy="filter"></Input>
+          <UploadButton onClick={this.toggleUploadArea} data-cy="upload">UPLOAD</UploadButton>
+        </Header>
+        <section>
+          {this.state.showUploadArea && <FileUploader uploadDocuments={this.uploadDocuments} />}
+          {this.state.error && <div>{this.state.error}</div>}
+          <GalleryHeader>
+            <H1 data-cy="documents-count">{this.state.documentsCount} documents</H1>
+            <H2 data-cy="documents-size">Total Size: {this.state.documentsTotalSize}kb</H2>
+          </GalleryHeader>
 
-        {this.state.documents.map(({ id, name, size, deleting})=>(
-          <Document
-            key={id}
-            id={id}
-            name={name}
-            size={size}
-            deleting={deleting}
-            deleteDocument={this.deleteDocument}
-          />
-        ))}
-      </div>
+          <GalleryDocuments>
+            {this.state.documents.map(({ id, name, size, deleting})=>(
+              <Document
+                key={id}
+                id={id}
+                name={name}
+                size={size}
+                deleting={deleting}
+                deleteDocument={this.deleteDocument}
+              />
+            ))}
+          </GalleryDocuments>
+
+        </section>
+      </Container>
     );
   }
 }
