@@ -79,7 +79,7 @@ class App extends Component {
           {this.state.showUploadArea && <FileUploader uploadDocuments={this.uploadDocuments} />}
           {this.state.error && <div>{this.state.error}</div>}
           <GalleryHeader>
-            <H1 data-cy="documents-count">{this.state.documentsCount} documents</H1>
+            <H1 data-cy="documents-count">{this.state.documentsCount} {this.state.documentsCount===1?'document':'documents'}</H1>
             <H2 data-cy="documents-size">Total Size: {this.state.documentsTotalSize}kb</H2>
           </GalleryHeader>
 
