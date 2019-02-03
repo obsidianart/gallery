@@ -1,4 +1,4 @@
-# Stefano Solinas - 3 February 2019
+# Stefano - 3 February 2019
 
 ## Installation
 - If required [install Node](https://nodejs.org/en/)
@@ -23,6 +23,7 @@ You will also see any lint errors in the console.
 
 Launches the Cypress test runner.<br>
 Note: both client and mock server should be running to run the testss!<br>
+Note: to speed up tests it might be worth reducing the endpoint timeout, check the index file in the mock folder<br>
 See the section about [running tests](https://docs.cypress.io/guides/getting-started/testing-your-app.html) for more information.
 
 ### `npm run build`
