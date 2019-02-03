@@ -5,7 +5,7 @@ context('Page elements', () => {
     cy.visit('http://localhost:3000/')
   })
 
-  // it('should display the documents', () => {
-  //   cy.get('[data-cy=documents]').should('be.visible')
-  // })
+  it('should display the documents', () => {
+    cy.get('[data-cy=document]').its('length').should('eq', 6)
+  })
 })

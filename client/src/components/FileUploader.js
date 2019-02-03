@@ -13,7 +13,6 @@ class FileUploader extends PureComponent {
     return (
       <Dropzone
         accept="image/jpeg, image/png"
-        onDrop={()=>alert('dropped')}
         onDropAccepted={this.props.uploadDocuments}
         onDropRejected={this.showUserError}
         multiple={false}

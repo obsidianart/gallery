@@ -22,6 +22,7 @@ You will also see any lint errors in the console.
 ### `npm test`
 
 Launches the Cypress test runner.<br>
+Note: both client and mock server should be running to run the testss!<br>
 See the section about [running tests](https://docs.cypress.io/guides/getting-started/testing-your-app.html) for more information.
 
 ### `npm run build`
