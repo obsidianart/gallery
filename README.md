@@ -6,48 +6,12 @@
 - Go to the root folder from terminal and run `cd server && npm install`
 
 
-## Security
-// List security concerns:
-// - that have been addressed
-// - that have *not* been addressed
-## Improvements
-// What could be added to the app / API?
-## Libraries
-// What external libraries have you used and why?
-## API
-// Any general observation about the API?
-// document each endpoint using the following template: ```
-### GET /resources
-// Description of the endpoint:
-// - what does the endpoint do?
-// - what does it return?
-// - does it accept specific parameters? ```
----
-## Other notes
-// Anything else you want to mention
+## Running
+- Go to the root folder from terminal and run `cd client && npm start`
+- Go to the root folder from terminal and run `cd server && npm start`
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+## deatiled script info
 ### `npm start`
 Runs the app in the development mode.<br>
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
@@ -70,19 +34,6 @@ Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-
-
-
-
-
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
-## Available Scripts
-
-In the project directory, you can run:
-
-
 ### `npm run eject`
 
 **Note: this is a one-way operation. Once you `eject`, you can’t go back!**
@@ -93,32 +44,70 @@ Instead, it will copy all the configuration files and the transitive dependencie
 
 You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Security
+Backend security will not be discussed as it is not implemented
+On the frontend perspective, the main risk are the user content generated from user A but displayed from user B
+With the current structure, a document is represented by:
+- `id` => this is generated hence no risk
+- `size` => this is generated hence no risk
+- `name` => this is inserted by the user. The React template interpolation should take care correctly of any attempt to manipulate this but it might be worth looking more into it
 
-### Code Splitting
+Note: there's no requirement or UX suggestion that the files can be retrieved from this interface (even if it is asked that the mock saves them). The ability of retrieving files would open for a lot more security concern and might require the backend to perform additional security on the images.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
 
-### Analyzing the Bundle Size
+## Improvements
+Depending on the actual use the following might be useful
+- Loading state when fetching
+- Uploading percentage
+- Explicit errors: currently the backend always return a generic error. It is likely that for security this is the case but it's worth seeing if some error can be descriptive
+- Better design: I'm not sure about this one, the requirements ask for a specific design
+- Auto-upload on drag: instead of clicking the button allow the entire window to be a drop area
+- Check file headers instead of mime type: I remember a bug on a browser from 4 years ago using mime type, more testing is required (I think the problem was when uploading from a Samsung Android phone but I can't test it)
+- Directly upload on mobile: for mobile screen evaluate the possibility to not having drag & drop
+- Evaluate pagination: Is pagination needed? how many file can be there?
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+## Libraries
+I'm going to discuss only frotend libraries
+- The project is based on the basic react app
+- react-dropzone: It allows a nicer interface for uploading files and allows drag and drop
 
-### Making a Progressive Web App
+## API
+All endpoint return json. All endpoint return an `{error: 'actual error'}` on expected error.
+The global error handler is not updated, if the mock goes that bad probably we should fix the mock.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+### GET /list?filterByName=filter
+- returns the list of all documents
+- accept a query param called filterByName, all documents are returned when empty
+- sizes are in KB
+- returns a json object as follow
+``` JSON
+{
+  "documents": [
+    {
+      "id": "1",
+      "name": "Doc 1",
+      "size": 600
+    }
+  ],
+  "documentsCount": 1,
+  "documentsTotalSize": 600
+}
+```
 
-### Advanced Configuration
+### DELETE /delete/:id
+- the file is removed from the list
+- the endpoint is idempotent (it always return 200 unless an error occurs)
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+### POST /upload
+- the endpoint leverage on [express-filer-uploader](https://www.npmjs.com/package/express-fileupload)
+- the maximum file size is 10
+- the endpoint accept multiple files, this might be incorrect against the requirements
 
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+---
+## Other notes
+I would love if open tests would have a problem to solve as well.
+In a normal working enviroment I would ask for explanations or know more to make my own decisions.
+Without knowing the project, the users, the reasons, how can I decide if not having a way to see the uploaded image is right or wrong?
+How can I know if doing more than required is good or bad?
