@@ -3,7 +3,7 @@
 
 const uniqid = require('uniqid')
 
-let documents = [
+const originalState = [
   {
     id: '1',
     name: 'Doc 1',
@@ -14,6 +14,8 @@ let documents = [
     size: 200
   }
 ]
+
+let documents = [...originalState]
 
 const getTotalSize = (docs) => docs.reduce((total, doc) => (total + doc.size), 0)
 
@@ -80,6 +82,11 @@ module.exports = {
 
   delete: async (id) => {
     documents = documents.filter(doc => doc.id !== id)
+    return {}
+  },
+
+  reset: async () => {
+    documents = [...originalState]
     return {}
   }
 }
